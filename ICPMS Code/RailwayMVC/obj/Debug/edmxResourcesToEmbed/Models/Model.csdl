@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MVC_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Sale">
+    <Key>
+      <PropertyRef Name="CRS_Code" />
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="CRS_Code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Target" Type="Int32" />
+    <Property Name="Actual_val" Type="Int32" />
+    <NavigationProperty Name="Station" Relationship="Self.FK_Sales_Station" FromRole="Sales" ToRole="Station" />
+  </EntityType>
+  <EntityType Name="Station">
+    <Key>
+      <PropertyRef Name="CRS_Code" />
+    </Key>
+    <Property Name="Station_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CRS_Code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Target" Type="Int32" />
+    <NavigationProperty Name="Sales" Relationship="Self.FK_Sales_Station" FromRole="Station" ToRole="Sales" />
+  </EntityType>
+  <Association Name="FK_Sales_Station">
+    <End Role="Station" Type="Self.Station" Multiplicity="1" />
+    <End Role="Sales" Type="Self.Sale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="CRS_Code" />
+      </Principal>
+      <Dependent Role="Sales">
+        <PropertyRef Name="CRS_Code" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MVCContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Sales" EntityType="Self.Sale" />
+    <EntitySet Name="Stations" EntityType="Self.Station" />
+    <AssociationSet Name="FK_Sales_Station" Association="Self.FK_Sales_Station">
+      <End Role="Station" EntitySet="Stations" />
+      <End Role="Sales" EntitySet="Sales" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,55 @@
+﻿@model RailwayMVC.Models.Users
+
+@{
+    ViewBag.Title = "Login";
+}
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/Login.css" rel="stylesheet" />
+
+
+</head>
+<body>
+
+    @using (Html.BeginForm("Login", "Railway", FormMethod.Post))
+    {
+
+        <div class="body"></div>
+        <div class="grad"></div>
+        <div class="header">
+            <div>ICPMS<span>Railway</span></div>
+        </div>
+        <br>
+        <div class="login">
+            <fieldset>
+                <legend>RailWays</legend>
+
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @if (@ViewBag.Message != null)
+                {
+                    <div style="border: 1px solid red">
+                        @ViewBag.Message
+                    </div>
+                }
+                <input type="text" placeholder="username" name="User_name"><br>
+                @Html.ValidationMessageFor(a => a.User_name)
+                <input type="password" placeholder="password" name="Pass"> <br>
+                @Html.ValidationMessageFor(a => a.Pass)
+                <input type="submit" class="btn btn-primary" value="Login" />
+
+
+            </fieldset>
+        </div>
+
+
+
+    }
+</body>
+</html>

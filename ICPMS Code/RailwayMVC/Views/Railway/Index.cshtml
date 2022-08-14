@@ -1,0 +1,281 @@
+﻿@using RailwayMVC.Models
+@model Sale
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <div class="table-responsive" style="margin-left: 10%; margin-top: 2%; margin-right: 10% ">
+        <h2>Station Details</h2>
+        <hr>
+        <table class="table" id="tblCustomers">
+            <thead>
+                <tr>
+                    <th>Station Name</th>
+                    <th>CRS Code</th>
+                    <th>Target</th>
+
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <br>
+        <h2>Data</h2>
+        <hr>
+        <br>
+        <div class="col-md-12 bg-light text-right">
+            <button type="button" class="btn btn-primary ml-2" data-toggle="modal" data-target="#exampleModal">Add Data</button>
+        </div>
+        <hr>
+
+
+        <table class="table" id="tblCustomers1">
+            <thead>
+                <tr>
+                    <th>CRS Code</th>
+                    <th>Date</th>
+                    <th>Target</th>
+                    <th>Actual value</th>
+                    <th>Variance</th>
+
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    @* This is a form to insert sales data
+        'ViewBag.Station ' after login we load sales code to this ViewBag 
+    *@
+
+    @using (Html.BeginForm("AddSale", "Railway", FormMethod.Post))
+    {
+        <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Data Form</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>CRS Code:</label>
+                            @Html.DropDownListFor(model => model.CRS_Code, ViewBag.Station as SelectList, new { @class = "form-control", @id = "crs" })
+                        </div>
+                        @*<div class="form-group">
+            @Html.HiddenFor(model => model.Date, new { @Value = DateTime.Now.ToString("dd-MM-yyyy") })
+        </div>*@
+                        <div class="form-group">
+                            <label>Target:</label>
+                            <input class="form-control" type="text" name="Target" value="" id="target" readonly />
+
+                        </div>
+                        <div class="form-group">
+                            <label>Actual Value:</label>
+
+                            @Html.TextBoxFor(m => m.Actual_val, new { @class = "form-control", @id = "act", @onchange = "myFunction(this.value)" })
+                        </div>
+                        <div class="form-group">
+                            <label>Variance:</label>
+                            <input class="form-control" type="text" value="" id="variance" />
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            @Html.TextBoxFor(model => model.Date,
+            new { @type = "date", @Value = Model?.Date.ToString("yyyy-MM-dd") })
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+
+            });
+        </script>
+    }
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Railway/getAllStation",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccess,
+                failure: function (response) {
+                    alert(response.d);
+                },
+                error: function (response) {
+                    alert(response.d);
+                }
+            });
+        });
+        function OnSuccess(response) {
+            $("#tblCustomers").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: response,
+
+                    columns: [{ 'data': 'Station_Name' },
+                    { 'data': 'CRS_Code' },
+                    { 'data': 'Target' }]
+                });
+        };
+
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Railway/Sales",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessSale,
+                failure: function (response) {
+                    alert(response.d);
+                },
+                error: function (response) {
+                    alert(response.d);
+                }
+            });
+        });
+        function OnSuccessSale(response) {
+            $("#tblCustomers1").DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 10, "All"]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: response,
+
+                    columns: [{ 'data': 'CRS_Code' },
+                    { 'data': 'Date' },
+                    { 'data': 'Target' },
+                    { 'data': 'Actual_val' },
+                    { 'data': 'Variance' }],
+
+                    rowCallback: function (row, data, index) {
+
+                        if (data.Target < data.Actual_val) {
+                            $(row).find('td:eq(4)').css('color', 'red');
+                        } else {
+                            $(row).find('td:eq(4)').css('color', 'green');
+                        }
+
+                    },
+                });
+        };
+        $('select').on('change', function () {
+            $.ajax({
+                url: "/Railway/TargetVal",
+                type: "POST", //send it through get method
+                data: {
+                    val: this.value
+                },
+                success: function (response) {
+                    document.getElementById("target").value = response;
+
+                },
+                error: function (xhr) {
+                    alert(xhr)
+                }
+            });
+
+
+        });
+        function myFunction(val) {
+            var tar = document.getElementById("target").value;
+            var act = document.getElementById("act").value;
+            var ver = parseInt(tar) - parseInt(val);
+            document.getElementById("variance").value = ver;
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@*<h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Station_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CRS_Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Target)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CRS_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Target)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+
+    </table>*@

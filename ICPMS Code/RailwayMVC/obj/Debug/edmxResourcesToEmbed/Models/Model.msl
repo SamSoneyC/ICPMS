@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MVC_ModelStoreContainer" CdmEntityContainer="MVCContext">
+    <EntitySetMapping Name="Sales">
+      <EntityTypeMapping TypeName="MVC_Model.Sale">
+        <MappingFragment StoreEntitySet="Sales">
+          <ScalarProperty Name="CRS_Code" ColumnName="CRS_Code" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Target" ColumnName="Target" />
+          <ScalarProperty Name="Actual_val" ColumnName="Actual_val" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stations">
+      <EntityTypeMapping TypeName="MVC_Model.Station">
+        <MappingFragment StoreEntitySet="Station">
+          <ScalarProperty Name="Station_Name" ColumnName="Station_Name" />
+          <ScalarProperty Name="CRS_Code" ColumnName="CRS_Code" />
+          <ScalarProperty Name="Target" ColumnName="Target" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

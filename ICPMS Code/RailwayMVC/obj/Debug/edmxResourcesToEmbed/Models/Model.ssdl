@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MVC_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Sales">
+    <Key>
+      <PropertyRef Name="CRS_Code" />
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="CRS_Code" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Date" Type="date" Nullable="false" />
+    <Property Name="Target" Type="int" />
+    <Property Name="Actual_val" Type="int" />
+  </EntityType>
+  <EntityType Name="Station">
+    <Key>
+      <PropertyRef Name="CRS_Code" />
+    </Key>
+    <Property Name="Station_Name" Type="varchar" MaxLength="100" />
+    <Property Name="CRS_Code" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Target" Type="int" />
+  </EntityType>
+  <Association Name="FK_Sales_Station">
+    <End Role="Station" Type="Self.Station" Multiplicity="1" />
+    <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Station">
+        <PropertyRef Name="CRS_Code" />
+      </Principal>
+      <Dependent Role="Sales">
+        <PropertyRef Name="CRS_Code" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MVC_ModelStoreContainer">
+    <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Station" EntityType="Self.Station" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Sales_Station" Association="Self.FK_Sales_Station">
+      <End Role="Station" EntitySet="Station" />
+      <End Role="Sales" EntitySet="Sales" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
