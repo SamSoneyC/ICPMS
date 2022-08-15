@@ -1,4 +1,4 @@
-# Ice-Cream-Particulate-Monitoring-Station
+# Ice Cream Particulate Monitoring Station (ICPMS)
 Software Development Project
 
 **Group Number 119**
