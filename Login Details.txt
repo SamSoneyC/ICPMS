@@ -1,0 +1,3 @@
+Log in details
+Username:	Admin
+Password:	Admin123
